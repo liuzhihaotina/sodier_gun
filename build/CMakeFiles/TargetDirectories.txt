@@ -1,0 +1,3 @@
+/home/tina/workspaces/soldiers_guns/build/CMakeFiles/my_cmake_exe.dir
+/home/tina/workspaces/soldiers_guns/build/CMakeFiles/edit_cache.dir
+/home/tina/workspaces/soldiers_guns/build/CMakeFiles/rebuild_cache.dir
