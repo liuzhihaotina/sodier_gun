@@ -1,5 +1,6 @@
 #include "Soldier.h"
-
+#include "iostream"
+using namespace std;
 Soldier::Soldier(string name)
 {
     this->_name = name;
@@ -21,12 +22,4 @@ bool Soldier::fire()
     return this->_ptr_gun->shoot();
 }
 
-Soldier::~Soldier()
-{
-    if (this->_ptr_gun == nullptr)
-    {
-        return;
-    }
-    delete this->_ptr_gun;
-    this->_ptr_gun = nullptr;
-}
+

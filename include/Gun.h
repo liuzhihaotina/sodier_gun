@@ -13,7 +13,7 @@ public:
     }
     string _type;
     int _bullet_count;
-
+    // ~Gun();
     void addBullet(int bullet_num);
     bool shoot();
 

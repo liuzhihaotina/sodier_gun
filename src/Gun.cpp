@@ -18,3 +18,7 @@ bool Gun::shoot()
     cout << "Shoot successfully!" << endl;
     return true;
 }
+
+// Gun::~Gun() {
+//     cout << "Gun " << _type << " destroyed" << endl;
+// }

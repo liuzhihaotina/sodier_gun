@@ -87,14 +87,14 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/tina/workspaces/soldiers_guns/build/CMakeFiles /home/tina/workspaces/soldiers_guns/build//CMakeFiles/progress.marks
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
+	cd /home/tina/workspaces/soldiers_guns/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/tina/workspaces/soldiers_guns/build/CMakeFiles /home/tina/workspaces/soldiers_guns/build/extern/pybind11//CMakeFiles/progress.marks
+	cd /home/tina/workspaces/soldiers_guns/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 extern/pybind11/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/tina/workspaces/soldiers_guns/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 clean
+	cd /home/tina/workspaces/soldiers_guns/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 extern/pybind11/clean
 .PHONY : clean
 
 # The main clean target
@@ -103,103 +103,18 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 preinstall
+	cd /home/tina/workspaces/soldiers_guns/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 extern/pybind11/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 preinstall
+	cd /home/tina/workspaces/soldiers_guns/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 extern/pybind11/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	$(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/tina/workspaces/soldiers_guns/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
-
-#=============================================================================
-# Target rules for targets named soldier_gun
-
-# Build rule for target.
-soldier_gun: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 soldier_gun
-.PHONY : soldier_gun
-
-# fast build rule for target.
-soldier_gun/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/soldier_gun.dir/build.make CMakeFiles/soldier_gun.dir/build
-.PHONY : soldier_gun/fast
-
-bind.o: bind.cpp.o
-.PHONY : bind.o
-
-# target to build an object file
-bind.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/soldier_gun.dir/build.make CMakeFiles/soldier_gun.dir/bind.cpp.o
-.PHONY : bind.cpp.o
-
-bind.i: bind.cpp.i
-.PHONY : bind.i
-
-# target to preprocess a source file
-bind.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/soldier_gun.dir/build.make CMakeFiles/soldier_gun.dir/bind.cpp.i
-.PHONY : bind.cpp.i
-
-bind.s: bind.cpp.s
-.PHONY : bind.s
-
-# target to generate assembly for a file
-bind.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/soldier_gun.dir/build.make CMakeFiles/soldier_gun.dir/bind.cpp.s
-.PHONY : bind.cpp.s
-
-src/Gun.o: src/Gun.cpp.o
-.PHONY : src/Gun.o
-
-# target to build an object file
-src/Gun.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/soldier_gun.dir/build.make CMakeFiles/soldier_gun.dir/src/Gun.cpp.o
-.PHONY : src/Gun.cpp.o
-
-src/Gun.i: src/Gun.cpp.i
-.PHONY : src/Gun.i
-
-# target to preprocess a source file
-src/Gun.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/soldier_gun.dir/build.make CMakeFiles/soldier_gun.dir/src/Gun.cpp.i
-.PHONY : src/Gun.cpp.i
-
-src/Gun.s: src/Gun.cpp.s
-.PHONY : src/Gun.s
-
-# target to generate assembly for a file
-src/Gun.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/soldier_gun.dir/build.make CMakeFiles/soldier_gun.dir/src/Gun.cpp.s
-.PHONY : src/Gun.cpp.s
-
-src/Soldier.o: src/Soldier.cpp.o
-.PHONY : src/Soldier.o
-
-# target to build an object file
-src/Soldier.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/soldier_gun.dir/build.make CMakeFiles/soldier_gun.dir/src/Soldier.cpp.o
-.PHONY : src/Soldier.cpp.o
-
-src/Soldier.i: src/Soldier.cpp.i
-.PHONY : src/Soldier.i
-
-# target to preprocess a source file
-src/Soldier.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/soldier_gun.dir/build.make CMakeFiles/soldier_gun.dir/src/Soldier.cpp.i
-.PHONY : src/Soldier.cpp.i
-
-src/Soldier.s: src/Soldier.cpp.s
-.PHONY : src/Soldier.s
-
-# target to generate assembly for a file
-src/Soldier.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/soldier_gun.dir/build.make CMakeFiles/soldier_gun.dir/src/Soldier.cpp.s
-.PHONY : src/Soldier.cpp.s
 
 # Help Target
 help:
@@ -209,16 +124,6 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... soldier_gun"
-	@echo "... bind.o"
-	@echo "... bind.i"
-	@echo "... bind.s"
-	@echo "... src/Gun.o"
-	@echo "... src/Gun.i"
-	@echo "... src/Gun.s"
-	@echo "... src/Soldier.o"
-	@echo "... src/Soldier.i"
-	@echo "... src/Soldier.s"
 .PHONY : help
 
 
@@ -230,6 +135,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	$(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/tina/workspaces/soldiers_guns/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 
