@@ -63,7 +63,7 @@ CMAKE_BINARY_DIR = /home/tina/workspaces/soldiers_guns/build
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
-all: CMakeFiles/soldier_gun.dir/all
+all: CMakeFiles/draw.dir/all
 all: extern/pybind11/all
 .PHONY : all
 
@@ -72,7 +72,7 @@ preinstall: extern/pybind11/preinstall
 .PHONY : preinstall
 
 # The main recursive "clean" target.
-clean: CMakeFiles/soldier_gun.dir/clean
+clean: CMakeFiles/draw.dir/clean
 clean: extern/pybind11/clean
 .PHONY : clean
 
@@ -92,30 +92,30 @@ extern/pybind11/clean:
 .PHONY : extern/pybind11/clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/soldier_gun.dir
+# Target rules for target CMakeFiles/draw.dir
 
 # All Build rule for target.
-CMakeFiles/soldier_gun.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/soldier_gun.dir/build.make CMakeFiles/soldier_gun.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/soldier_gun.dir/build.make CMakeFiles/soldier_gun.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/tina/workspaces/soldiers_guns/build/CMakeFiles --progress-num=1,2,3,4 "Built target soldier_gun"
-.PHONY : CMakeFiles/soldier_gun.dir/all
+CMakeFiles/draw.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/draw.dir/build.make CMakeFiles/draw.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/draw.dir/build.make CMakeFiles/draw.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/tina/workspaces/soldiers_guns/build/CMakeFiles --progress-num=1,2 "Built target draw"
+.PHONY : CMakeFiles/draw.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/soldier_gun.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/tina/workspaces/soldiers_guns/build/CMakeFiles 4
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/soldier_gun.dir/all
+CMakeFiles/draw.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/tina/workspaces/soldiers_guns/build/CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/draw.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/tina/workspaces/soldiers_guns/build/CMakeFiles 0
-.PHONY : CMakeFiles/soldier_gun.dir/rule
+.PHONY : CMakeFiles/draw.dir/rule
 
 # Convenience name for target.
-soldier_gun: CMakeFiles/soldier_gun.dir/rule
-.PHONY : soldier_gun
+draw: CMakeFiles/draw.dir/rule
+.PHONY : draw
 
 # clean rule for target.
-CMakeFiles/soldier_gun.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/soldier_gun.dir/build.make CMakeFiles/soldier_gun.dir/clean
-.PHONY : CMakeFiles/soldier_gun.dir/clean
+CMakeFiles/draw.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/draw.dir/build.make CMakeFiles/draw.dir/clean
+.PHONY : CMakeFiles/draw.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

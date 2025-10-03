@@ -1,1 +1,0 @@
-/usr/bin/c++ -fPIC -O3 -flto -shared  -o soldier_gun.cpython-310-x86_64-linux-gnu.so CMakeFiles/soldier_gun.dir/bind.cpp.o CMakeFiles/soldier_gun.dir/src/Gun.cpp.o CMakeFiles/soldier_gun.dir/src/Soldier.cpp.o 

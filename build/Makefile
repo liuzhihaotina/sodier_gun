@@ -117,89 +117,41 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named soldier_gun
+# Target rules for targets named draw
 
 # Build rule for target.
-soldier_gun: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 soldier_gun
-.PHONY : soldier_gun
+draw: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 draw
+.PHONY : draw
 
 # fast build rule for target.
-soldier_gun/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/soldier_gun.dir/build.make CMakeFiles/soldier_gun.dir/build
-.PHONY : soldier_gun/fast
+draw/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/draw.dir/build.make CMakeFiles/draw.dir/build
+.PHONY : draw/fast
 
-bind.o: bind.cpp.o
-.PHONY : bind.o
-
-# target to build an object file
-bind.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/soldier_gun.dir/build.make CMakeFiles/soldier_gun.dir/bind.cpp.o
-.PHONY : bind.cpp.o
-
-bind.i: bind.cpp.i
-.PHONY : bind.i
-
-# target to preprocess a source file
-bind.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/soldier_gun.dir/build.make CMakeFiles/soldier_gun.dir/bind.cpp.i
-.PHONY : bind.cpp.i
-
-bind.s: bind.cpp.s
-.PHONY : bind.s
-
-# target to generate assembly for a file
-bind.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/soldier_gun.dir/build.make CMakeFiles/soldier_gun.dir/bind.cpp.s
-.PHONY : bind.cpp.s
-
-src/Gun.o: src/Gun.cpp.o
-.PHONY : src/Gun.o
+src/draw.o: src/draw.cpp.o
+.PHONY : src/draw.o
 
 # target to build an object file
-src/Gun.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/soldier_gun.dir/build.make CMakeFiles/soldier_gun.dir/src/Gun.cpp.o
-.PHONY : src/Gun.cpp.o
+src/draw.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/draw.dir/build.make CMakeFiles/draw.dir/src/draw.cpp.o
+.PHONY : src/draw.cpp.o
 
-src/Gun.i: src/Gun.cpp.i
-.PHONY : src/Gun.i
-
-# target to preprocess a source file
-src/Gun.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/soldier_gun.dir/build.make CMakeFiles/soldier_gun.dir/src/Gun.cpp.i
-.PHONY : src/Gun.cpp.i
-
-src/Gun.s: src/Gun.cpp.s
-.PHONY : src/Gun.s
-
-# target to generate assembly for a file
-src/Gun.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/soldier_gun.dir/build.make CMakeFiles/soldier_gun.dir/src/Gun.cpp.s
-.PHONY : src/Gun.cpp.s
-
-src/Soldier.o: src/Soldier.cpp.o
-.PHONY : src/Soldier.o
-
-# target to build an object file
-src/Soldier.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/soldier_gun.dir/build.make CMakeFiles/soldier_gun.dir/src/Soldier.cpp.o
-.PHONY : src/Soldier.cpp.o
-
-src/Soldier.i: src/Soldier.cpp.i
-.PHONY : src/Soldier.i
+src/draw.i: src/draw.cpp.i
+.PHONY : src/draw.i
 
 # target to preprocess a source file
-src/Soldier.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/soldier_gun.dir/build.make CMakeFiles/soldier_gun.dir/src/Soldier.cpp.i
-.PHONY : src/Soldier.cpp.i
+src/draw.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/draw.dir/build.make CMakeFiles/draw.dir/src/draw.cpp.i
+.PHONY : src/draw.cpp.i
 
-src/Soldier.s: src/Soldier.cpp.s
-.PHONY : src/Soldier.s
+src/draw.s: src/draw.cpp.s
+.PHONY : src/draw.s
 
 # target to generate assembly for a file
-src/Soldier.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/soldier_gun.dir/build.make CMakeFiles/soldier_gun.dir/src/Soldier.cpp.s
-.PHONY : src/Soldier.cpp.s
+src/draw.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/draw.dir/build.make CMakeFiles/draw.dir/src/draw.cpp.s
+.PHONY : src/draw.cpp.s
 
 # Help Target
 help:
@@ -209,16 +161,10 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... soldier_gun"
-	@echo "... bind.o"
-	@echo "... bind.i"
-	@echo "... bind.s"
-	@echo "... src/Gun.o"
-	@echo "... src/Gun.i"
-	@echo "... src/Gun.s"
-	@echo "... src/Soldier.o"
-	@echo "... src/Soldier.i"
-	@echo "... src/Soldier.s"
+	@echo "... draw"
+	@echo "... src/draw.o"
+	@echo "... src/draw.i"
+	@echo "... src/draw.s"
 .PHONY : help
 
 
