@@ -1,0 +1,28 @@
+# 忽略所有 .log 文件
+*.log
+
+# 忽略特定文件
+.env
+config.local.json
+.vscode/settings.local.json
+
+# 忽略整个目录
+node_modules/
+dist/
+build/
+
+# 忽略所有名为 temp 的文件夹
+temp/
+
+# 但不要忽略 libs/temp 中的 important.txt
+!libs/temp/important.txt
+
+# 忽略所有 .txt 文件，但不包括 README.txt
+*.txt
+!CMakeLists.txt
+!README.txt
+
+# 忽略目录下的特定文件类型
+logs/*.log
+temp/**/*.tmp
+
