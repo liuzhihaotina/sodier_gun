@@ -10,7 +10,10 @@ set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
 set(CMAKE_BUILD_TYPE Debug)
 
 include_directories(include) # 相对路径
-set(SRC src/test1.cpp src/test2.cpp) # 设置变量名 
+# 1 指定源文件
+# set(SRC src/test1.cpp src/test2.cpp) # 设置变量名 
+# or 2 收集指定目录下的所有源文件
+aux_source_directory(src SRC)
 add_library(test SHARED ${SRC}) # 添加源文件库
 
 add_executable(main1028 main.cpp)

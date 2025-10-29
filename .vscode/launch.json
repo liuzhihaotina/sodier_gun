@@ -28,7 +28,8 @@
                     "ignoreFailures": true
                 }
             ],
-            // "preLaunchTask": "CMake: build",
+            // "preLaunchTask": "Build",
+            "preLaunchTask": "just make",
             "miDebuggerArgs": "/usr/bin/gdb"
         }
     ]

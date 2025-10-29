@@ -6,7 +6,8 @@ using namespace std;
 int main()
 {
     int a = 0;
-    cout << "Hello, World! " << a << endl;
+    cout << "Hello, World! \n\\" << a << endl;
+    cout << "Use task.json to \tbuild." << endl;
     test1();
     test2();
     return 0;
