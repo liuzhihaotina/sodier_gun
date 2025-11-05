@@ -1,5 +1,0 @@
-/home/tina/workspaces/soldiers_guns/build/CMakeFiles/draw.dir
-/home/tina/workspaces/soldiers_guns/build/CMakeFiles/edit_cache.dir
-/home/tina/workspaces/soldiers_guns/build/CMakeFiles/rebuild_cache.dir
-/home/tina/workspaces/soldiers_guns/build/extern/pybind11/CMakeFiles/edit_cache.dir
-/home/tina/workspaces/soldiers_guns/build/extern/pybind11/CMakeFiles/rebuild_cache.dir
