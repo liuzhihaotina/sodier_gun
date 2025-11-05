@@ -30,11 +30,13 @@ CMAKE_COLOR_MAKEFILE:BOOL=ON
 //CXX compiler
 CMAKE_CXX_COMPILER:FILEPATH=/usr/bin/c++
 
-//LLVM archiver
-CMAKE_CXX_COMPILER_AR:FILEPATH=/usr/bin/llvm-ar-14
+//A wrapper around 'ar' adding the appropriate '--plugin' option
+// for the GCC compiler
+CMAKE_CXX_COMPILER_AR:FILEPATH=/usr/bin/gcc-ar-11
 
-//Generate index for LLVM archive
-CMAKE_CXX_COMPILER_RANLIB:FILEPATH=/usr/bin/llvm-ranlib-14
+//A wrapper around 'ranlib' adding the appropriate '--plugin' option
+// for the GCC compiler
+CMAKE_CXX_COMPILER_RANLIB:FILEPATH=/usr/bin/gcc-ranlib-11
 
 //Flags used by the CXX compiler during all build types.
 CMAKE_CXX_FLAGS:STRING=
@@ -298,15 +300,6 @@ PYBIND11_TEST:BOOL=OFF
 //Respect CMAKE_CROSSCOMPILING
 PYBIND11_USE_CROSSCOMPILING:BOOL=OFF
 
-//Python Interpreter
-Python_EXECUTABLE:FILEPATH=/home/tina/miniconda3/envs/myenv/bin/python3.10
-
-//Python Include Directory
-Python_INCLUDE_DIR:FILEPATH=/home/tina/miniconda3/envs/myenv/include/python3.10
-
-//Python Library
-Python_LIBRARY:FILEPATH=/home/tina/miniconda3/envs/myenv/lib/libpython3.10.so
-
 //Value Computed by CMake
 SOLDIERFIRE_BINARY_DIR:STATIC=/home/tina/workspaces/soldiers_guns/build
 
@@ -507,12 +500,10 @@ CMAKE_UNAME:INTERNAL=/usr/bin/uname
 CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
 //Details about finding OpenCV
 FIND_PACKAGE_MESSAGE_DETAILS_OpenCV:INTERNAL=[/usr][v4.5.4()]
-//Details about finding Python
-FIND_PACKAGE_MESSAGE_DETAILS_Python:INTERNAL=[/home/tina/miniconda3/envs/myenv/bin/python3.10][/home/tina/miniconda3/envs/myenv/include/python3.10][cfound components: Interpreter Development.Module Development.Embed ][v3.10.18(3.8)]
-//Test HAS_FLTO
-HAS_FLTO:INTERNAL=1
-//Test HAS_FLTO_THIN
-HAS_FLTO_THIN:INTERNAL=1
+//Details about finding Python3
+FIND_PACKAGE_MESSAGE_DETAILS_Python3:INTERNAL=[/home/tina/miniconda3/envs/myenv/bin/python3.10][/home/tina/miniconda3/envs/myenv/include/python3.10][/home/tina/miniconda3/envs/myenv/lib/libpython3.10.so][cfound components: Interpreter Development Development.Module Development.Embed ][v3.10.18()]
+//Test HAS_FLTO_AUTO
+HAS_FLTO_AUTO:INTERNAL=1
 PYBIND11_INCLUDE_DIR:INTERNAL=/home/tina/workspaces/soldiers_guns/extern/pybind11/include
 //Python executable during the last CMake run
 PYBIND11_PYTHON_EXECUTABLE_LAST:INTERNAL=/home/tina/miniconda3/envs/myenv/bin/python3.10
@@ -520,25 +511,21 @@ PYBIND11_PYTHON_EXECUTABLE_LAST:INTERNAL=/home/tina/miniconda3/envs/myenv/bin/py
 PYTHON_IS_DEBUG:INTERNAL=0
 PYTHON_MODULE_DEBUG_POSTFIX:INTERNAL=
 PYTHON_MODULE_EXTENSION:INTERNAL=.cpython-310-x86_64-linux-gnu.so
-Python_VERSION:INTERNAL=3.10.18
-Python_VERSION_MAJOR:INTERNAL=3
-Python_VERSION_MINOR:INTERNAL=10
-Python_VERSION_PATCH:INTERNAL=18
 //CMAKE_INSTALL_PREFIX during last run
 _GNUInstallDirs_LAST_CMAKE_INSTALL_PREFIX:INTERNAL=/usr/local
 _PYBIND11_CROSSCOMPILING:INTERNAL=OFF
-_Python:INTERNAL=Python
-_Python_DEVELOPMENT_EMBED_SIGNATURE:INTERNAL=38944f1bee878f4f990c84fccdd7dc04
-_Python_DEVELOPMENT_MODULE_SIGNATURE:INTERNAL=17c2aa04a7b1b8b420a368fdebdfc624
+_Python:INTERNAL=Python3
+_Python3_DEVELOPMENT_EMBED_SIGNATURE:INTERNAL=5992054c714c66d4130eec920bbe5ecd
+_Python3_DEVELOPMENT_MODULE_SIGNATURE:INTERNAL=953d6ba747e14e2ea407c5a49326bc93
 //Path to a program.
-_Python_EXECUTABLE:INTERNAL=/home/tina/miniconda3/envs/myenv/bin/python3.10
+_Python3_EXECUTABLE:INTERNAL=/home/tina/miniconda3/envs/myenv/bin/python3.10
 //Path to a file.
-_Python_INCLUDE_DIR:INTERNAL=/home/tina/miniconda3/envs/myenv/include/python3.10
-//Python Properties
-_Python_INTERPRETER_PROPERTIES:INTERNAL=Python;3;10;18;64;;cpython-310-x86_64-linux-gnu;/home/tina/miniconda3/envs/myenv/lib/python3.10;/home/tina/miniconda3/envs/myenv/lib/python3.10;/home/tina/miniconda3/envs/myenv/lib/python3.10/site-packages;/home/tina/miniconda3/envs/myenv/lib/python3.10/site-packages
-_Python_INTERPRETER_SIGNATURE:INTERNAL=51b2a9daa8a58544c9a792eb82a3fc80
+_Python3_INCLUDE_DIR:INTERNAL=/home/tina/miniconda3/envs/myenv/include/python3.10
+//Python3 Properties
+_Python3_INTERPRETER_PROPERTIES:INTERNAL=Python;3;10;18;64;;cpython-310-x86_64-linux-gnu;/home/tina/miniconda3/envs/myenv/lib/python3.10;/home/tina/miniconda3/envs/myenv/lib/python3.10;/home/tina/miniconda3/envs/myenv/lib/python3.10/site-packages;/home/tina/miniconda3/envs/myenv/lib/python3.10/site-packages
+_Python3_INTERPRETER_SIGNATURE:INTERNAL=8f2808ec375970a8a318951b3b751294
 //Path to a library.
-_Python_LIBRARY_RELEASE:INTERNAL=/home/tina/miniconda3/envs/myenv/lib/libpython3.10.so
+_Python3_LIBRARY_RELEASE:INTERNAL=/home/tina/miniconda3/envs/myenv/lib/libpython3.10.so
 //True if pybind11 and all required components found on the system
 pybind11_FOUND:INTERNAL=TRUE
 //Directory where pybind11 headers are located

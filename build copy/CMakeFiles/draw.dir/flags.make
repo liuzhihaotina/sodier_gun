@@ -6,5 +6,5 @@ CXX_DEFINES = -Ddraw_EXPORTS
 
 CXX_INCLUDES = -I/home/tina/workspaces/soldiers_guns/include -isystem /home/tina/miniconda3/envs/myenv/include/python3.10 -isystem /home/tina/workspaces/soldiers_guns/extern/pybind11/include -isystem /usr/include/opencv4
 
-CXX_FLAGS = -O3 -fPIC -fvisibility=hidden -flto
+CXX_FLAGS = -O3 -fPIC -fvisibility=hidden -flto=auto -fno-fat-lto-objects
 
