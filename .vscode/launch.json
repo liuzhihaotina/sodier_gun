@@ -1,0 +1,52 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "C++ Launch",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/draw.cpython-310-x86_64-linux-gnu.so",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [
+                {
+                    "name": "PATH",
+                    "value": "${env:CONDA_PREFIX}/bin:${env:PATH}"
+                },
+                {
+                    "name": "LD_LIBRARY_PATH", 
+                    "value": "${env:CONDA_PREFIX}/lib:${env:LD_LIBRARY_PATH}"
+                }
+            ],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {   
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            // "preLaunchTask": "Build",
+            "preLaunchTask": "just make",
+            "miDebuggerArgs": "/usr/bin/gdb"
+        },
+        {
+            "name": "Python: Debug with Env",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/main.py",
+            "python": "/home/tina/miniconda3/envs/myenv/bin/python",
+            "console": "integratedTerminal",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}",
+                "DEBUG": "true",
+                "LOG_LEVEL": "debug"
+            },
+            // "envFile": "${workspaceFolder}/.env",
+            "preLaunchTask": "just make",
+            "justMyCode": true
+        }
+    ]
+}
