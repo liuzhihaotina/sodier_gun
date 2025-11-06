@@ -1,5 +1,6 @@
 {
     "files.associations": {
+        "*.py": "python",
         "iostream": "cpp",
         "array": "cpp",
         "atomic": "cpp",
@@ -42,6 +43,16 @@
         "ostream": "cpp",
         "stdexcept": "cpp",
         "streambuf": "cpp",
-        "typeinfo": "cpp"
+        "typeinfo": "cpp",
+        "chrono": "cpp",
+        "thread": "cpp",
+        "list": "cpp",
+        "ctime": "cpp",
+        "set": "cpp",
+        "optional": "cpp",
+        "ratio": "cpp",
+        "ranges": "cpp",
+        "semaphore": "cpp",
+        "stop_token": "cpp"
     }
 }

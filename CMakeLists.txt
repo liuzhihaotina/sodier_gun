@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.22.1)
 
 project(MAIN1028)
 
+
 # 为 Debug 构建自动添加 -g
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -O0 -Wall")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
@@ -17,6 +18,16 @@ aux_source_directory(src SRC)
 add_library(test SHARED ${SRC}) # 添加源文件库
 
 add_executable(main1028 main.cpp)
+# 检查 C++20 支持
+include(CheckCXXCompilerFlag)
+check_cxx_compiler_flag("-std=c++20" COMPILER_SUPPORTS_CXX20)
+
+if(COMPILER_SUPPORTS_CXX20)
+    target_compile_features(main1028 PRIVATE cxx_std_20)
+else()
+    target_compile_features(main1028 PRIVATE cxx_std_17)
+    message(WARNING "The compiler ${CMAKE_CXX_COMPILER} has no C++20 support. Using C++17 instead.")
+endif()
 target_link_libraries(main1028 test) # 链接库
 
 
