@@ -6,10 +6,12 @@
 config.local.json
 .vscode/settings.local.json
 
-# 忽略整个目录
+# 忽略整个目录内容
 node_modules/
 dist/
-build/
+
+# 忽略整个目录（包括目录本身）
+build
 
 # 忽略所有名为 temp 的文件夹
 temp/
