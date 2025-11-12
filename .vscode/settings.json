@@ -64,5 +64,6 @@
         "thread": "cpp",
         "codecvt": "cpp",
         "cinttypes": "cpp"
-    }
+    },
+    "liveServer.settings.port": 5501
 }
