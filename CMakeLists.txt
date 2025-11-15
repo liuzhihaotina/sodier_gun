@@ -47,7 +47,7 @@ endif()
 include_directories(${CMAKE_SOURCE_DIR}/include) # 绝对路径
 # include_directories(include) # 相对路径
 
-add_executable(${PROJECT_NAME} src/main.cpp)
+add_executable(${PROJECT_NAME} src/test.cpp)
 
 target_link_libraries(${PROJECT_NAME} "${TORCH_LIBRARIES}")
 target_include_directories(${PROJECT_NAME} PRIVATE "${TORCH_INCLUDE_DIRS}")

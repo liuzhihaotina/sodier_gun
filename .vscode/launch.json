@@ -1,6 +1,15 @@
 {
     "version": "0.2.0",
-    "configurations": [
+    "configurations": [ 
+        {
+            "name": "Python: v",
+            "type": "debugpy",
+            "request": "launch",
+            "python": "/home/tina/miniconda3/envs/myenv/bin/python",
+            "program": "scripts/example_train_pytorch.py",
+            "args": ["--lmdb", "data/out_train/train.lmdb"],
+            "console": "integratedTerminal"
+        },
         {
             "name": "C++ main",
             "type": "cppdbg",
