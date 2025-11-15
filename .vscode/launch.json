@@ -1,6 +1,14 @@
 {
     "version": "0.2.0",
-    "configurations": [ 
+    "configurations": [
+        {
+            "name": "Python: test",
+            "type": "debugpy",
+            "request": "launch",
+            "python": "/home/tina/miniconda3/envs/myenv/bin/python",
+            "program": "scripts/test.py",
+            "console": "integratedTerminal"
+        }, 
         {
             "name": "Python: v",
             "type": "debugpy",

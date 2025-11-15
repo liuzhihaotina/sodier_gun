@@ -1,3 +1,59 @@
+import torch
+from PIL import Image
+from torchvision import models
+from torchvision import transforms
+
+preprocess = transforms.Compose([
+    transforms.Resize(256),
+    transforms.CenterCrop(224),
+    transforms.ToTensor(),
+    transforms.Normalize(
+        mean=[0.485, 0.456, 0.406],
+        std=[0.229, 0.224, 0.225]
+    )])
+img = Image.open("data/test/dogs/dog.4001.jpg")
+# img.show()
+img_t = preprocess(img)
+
+# # 反标准化
+# def denormalize(tensor, mean, std):
+#     """反标准化张量"""
+#     mean = torch.tensor(mean).view(-1, 1, 1)
+#     std = torch.tensor(std).view(-1, 1, 1)
+#     return tensor * std + mean
+
+
+# # 反标准化并转换回PIL图像
+# denormalized_img = denormalize(
+#     img_t, [0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+# denormalized_img = torch.clamp(denormalized_img, 0, 1)  # 限制在0-1范围内
+# denormalized_img = transforms.ToPILImage()(denormalized_img)
+
+# # 保存图片
+# denormalized_img.save("data/preprocessed_dog40004.jpg")
+
+batch_t = torch.unsqueeze(img_t, 0)
+
+# print(dir(models))
+# resnet = models.resnet101(pretrained=True)
+with open('data/imagenet_classes.txt') as f:
+    labels = [line.strip() for line in f.readlines()]
+resnet = models.resnet101(weights=models.ResNet101_Weights.DEFAULT)
+# print(resnet)
+resnet.eval()
+out = resnet(batch_t)
+# print(out.shape)
+_, index = torch.max(out, 1)
+percentage = torch.nn.functional.softmax(out, dim=1)[0] * 100
+a, b = labels[index[0]], percentage[index[0]].item()
+print(f'Predicted: {a}, {b}%')
+
+_, indices = torch.sort(out, descending=True)
+c = [(labels[idx], percentage[idx].item()) for idx in indices[0][:5]]
+for i,j in c:
+    print(i, j)
+
+
 # #!/usr/bin/env python3
 # """
 # LMDB reader + DALI pipeline (改进版)
@@ -178,7 +234,7 @@
 #     print("CUDA device count:", torch.cuda.device_count())
 #     print("Current device:", torch.cuda.current_device())
 #     print("Device name:", torch.cuda.get_device_name(0))
-    
+
 #     # 测试简单的GPU操作
 #     x = torch.randn(3, 3).cuda()
 #     print("GPU tensor:", x)
@@ -192,7 +248,7 @@
 # # 标签索引到类别名称的映射
 # label_mapping = {
 #     0: 'airplane',
-#     1: 'automobile', 
+#     1: 'automobile',
 #     2: 'bird',
 #     3: 'cat',
 #     4: 'deer',
@@ -207,7 +263,7 @@
 # trainset = torchvision.datasets.CIFAR10(root='./data',train=True,download=True,transform=transform)
 # testset = torchvision.datasets.CIFAR10(root='./data',train=False,download=True,transform=transform)
 # batch_size=4
-# trainloader = torch.utils.data.DataLoader(trainset, batch_size=batch_size, 
+# trainloader = torch.utils.data.DataLoader(trainset, batch_size=batch_size,
 #                                          shuffle=True, num_workers=2)
 # testloader = torch.utils.data.DataLoader(testset, batch_size=batch_size,
 #                                         shuffle=False, num_workers=2)
@@ -221,7 +277,7 @@
 
 # # 获取一些随机数据
 # dataiter = iter(trainloader)
-# images, labels = next(dataiter)   
+# images, labels = next(dataiter)
 
 # # 打印标签
 # print(' '.join('%5s' % label_mapping[labels[j].item()] for j in range(batch_size)))
@@ -252,7 +308,7 @@
 #         x = torch.relu(self.fc2(x))
 #         x = self.fc3(x)
 #         return x
-    
+
 # net = Net()
 
 # criterion = torch.nn.CrossEntropyLoss()
@@ -291,7 +347,6 @@
 #         total += labels.size(0)
 #         correct += (predicted == labels).sum().item()
 # print('Accuracy of the network on the 50000 train images: %d %%' % (100 * correct / total))
-
 
 
 # class_correct = list(0. for _ in range(10))
