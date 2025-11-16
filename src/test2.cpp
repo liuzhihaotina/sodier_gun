@@ -5,3 +5,7 @@ void test2()
 {
     cout << "This is test2 function" << endl;
 }
+int add(int a, int b)
+{
+    return a + b;
+}
