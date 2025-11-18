@@ -15,6 +15,7 @@ data_cifar-10/
 checkpoints/
 
 # 忽略所有名为 temp 的文件夹
+tmp/
 temp/
 __pycache__/
 

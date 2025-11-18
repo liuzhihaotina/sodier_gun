@@ -1,10 +1,11 @@
 #include <iostream>
+#include "test1.h"
 
-int add(int a, int b);
+using namespace std;
 
 int main()
 {
-    std::cout << "using add function" << std::endl;
-    std::cout << "3 + 5 = " << add(3, 5) << std::endl;
+    int f;
+    cout << "f = " << f << std::endl;
     return 0;
 }
