@@ -1,10 +1,172 @@
-import torch
-from PIL import Image
+# ------------------------------------np.float16/32/64内存占用对比-------------------------------------
+# import numpy as np
+# def memory_comparison():
+#     print("内存占用对比:")
+#     print("=" * 40)
 
-img_arr = Image.open("data/test/dogs/dog.4001.jpg")
-img = torch.from_numpy(img_arr)
-out = img.permute(2, 0, 1)
-print(out.shape)
+#     size = 1000000  # 100万个元素
+
+#     arr_16 = np.ones(size, dtype=np.float16)
+#     arr_32 = np.ones(size, dtype=np.float32)
+#     arr_64 = np.ones(size, dtype=np.float64)
+
+#     print(f"float16 数组: {arr_16.nbytes / 1024:.2f} KB")
+#     print(f"float32 数组: {arr_32.nbytes / 1024:.2f} KB")
+#     print(f"float64 数组: {arr_64.nbytes / 1024:.2f} KB")
+#     print()
+#     print(f"float16 只有 float32 的 {arr_16.nbytes/arr_32.nbytes:.0%}")
+#     print(f"float16 只有 float64 的 {arr_16.nbytes/arr_64.nbytes:.0%}")
+
+# memory_comparison()
+
+# ------------------------------读取csv文件为numpy数组-----------------------------
+import numpy as np
+import csv
+import torch
+# 设置打印选项，禁用科学计数法
+torch.set_printoptions(sci_mode=False)
+
+wine_path = "/mnt/d/书籍/训练模型/dlwpt-code-master/data/p1ch4/tabular-wine/winequality-white.csv"
+wineq_numpy = np.loadtxt(wine_path, dtype=np.float32,
+                         delimiter=";", skiprows=1)
+a = csv.reader(open(wine_path), delimiter=';')
+# print(f"a.type={type(a)}")
+col_list = next(a)
+# print(wineq_numpy.shape) # (4898, 12)
+# print(col_list)
+# print(wineq_numpy[0])  # 查看第一行数据
+# print(next(a))
+# wineq_numpy2 = np.array(list(a), dtype=np.float32)
+wineq_tensor = torch.from_numpy(wineq_numpy)
+# print(wineq_tensor.shape, wineq_tensor.dtype, wineq_tensor.device)
+data = wineq_tensor[:, :-1]
+data_mean = data.mean(dim=0)
+data_var = data.var(dim=0)
+# print(data_mean.shape, data_var.shape)
+data_normalized = (data - data_mean) / data_var.sqrt()
+# print('---data：', data[0])#.to(dtype=torch.int))
+# print('---data that be normalized：', data_normalized[0])
+
+# print('----float16:',data[0].half().dtype)
+# print('----float32:',data[0].float().dtype)
+# print('----float64:',data[0].double().dtype)
+target = wineq_tensor[:, -1].long()
+# print(target.shape, target.shape[0], type(target.shape), type(target.shape[0]))
+# tager_onehot = torch.nn.functional.one_hot(target, num_classes=10)
+target_onehot = torch.zeros(target.shape[0], 10).scatter_( 1, target.unsqueeze(1), 1.0)
+
+# bad_index = (target <= 3).nonzero(as_tuple=True)[0] # 找出满足条件的索引
+bad_mask = (target <= 3) # 布尔掩码，满足条件的True，否则False
+mid_mask = (target > 3) & (target < 7)
+good_mask = (target >= 7)
+bad_data = data[bad_mask]
+mid_data = data[mid_mask]
+good_data = data[good_mask]
+
+bad_mean = bad_data.mean(dim=0)
+mid_mean = mid_data.mean(dim=0)
+good_mean = good_data.mean(dim=0)
+
+for i, args in enumerate(zip(col_list[:-1], bad_mean, mid_mean, good_mean)):
+    print('{:2} {:20} {:6.2f} {:6.2f} {:6.2f}'.format(i, *args))
+
+pass
+# bad_data = data_normalized[bad_mask]
+# mid_data = data_normalized[mid_mask]
+# good_data = data_normalized[good_mask]
+# print(bad_index.shape, bad_mask.shape)
+# print('------', bad_mask.sum().item())
+# print(bad_index)
+# print(target.shape)
+# print(target.min(),target.max())
+# print(torch.equal(tager_onehot, target_onehot))
+# print((torch.eq(tager_onehot, target_onehot)).all())
+
+# import torch
+
+# data = torch.tensor([
+#     [1, 2, 3],
+#     [4, 5, 6], 
+#     [7, 8, 9]
+# ])
+
+# # 多条件筛选：值大于3且小于8
+# condition = (data > 3) & (data < 8)
+# indices = condition.nonzero(as_tuple=True)
+# i=condition.nonzero()
+
+# print("原始数据:")
+# print(data)
+# print(f"\n满足条件的位置: {indices}")
+# print(f"满足条件的值: {data[indices]}")
+
+# --------------------迭代器的使用-next------------------------
+# # 创建列表迭代器
+# # my_list = [1, 2, 3, 4, 5]
+# my_list = (1,2,3,4,5)
+# iterator = iter(my_list)
+
+# print(next(iterator))  # 输出: 1
+# print(next(iterator))  # 输出: 2
+# print(next(iterator))  # 输出: 3
+# print(next(iterator))  # 输出: 4
+# print(next(iterator))  # 输出: 5
+# print(tuple(iterator))
+# # print(next(iterator))  # 如果取消注释，会抛出 StopIteration 异常
+
+# --------------------计算不同h/w图片的均值、标准差-------------------------------
+# import os
+# import torch
+# import imageio.v2 as imageio
+# batch_size = 4
+
+# data_dir = 'data/test/cats'
+# filenames = [name for name in os.listdir(
+#     data_dir) if os.path.splitext(name)[-1] == '.jpg']
+# # print(len(os.listdir(data_dir)), len(filenames))
+# shapes = set()
+# for i, filename in enumerate(filenames):
+#     img_arr = imageio.imread(os.path.join(data_dir, filename))
+#     img_t = torch.from_numpy(img_arr)
+#     img_t = img_t.permute(2, 0, 1)
+#     img_t = img_t[:3]
+#     shapes.add(tuple(img_t.shape[1:])+(filename,))
+# # print(shapes)
+# print(sorted(list(shapes), key=lambda x: (x[0], x[1])))
+# import torch
+# import torchvision.transforms as transforms
+# from PIL import Image
+
+# def calculate_mean_std_torch(image_paths):
+#     """
+#     使用PyTorch计算均值和标准差
+#     """
+#     channel_sum = torch.zeros(3)
+#     channel_sum_squared = torch.zeros(3)
+#     pixel_num = 0
+
+#     transform = transforms.ToTensor()  # 自动归一化到 [0, 1]
+
+#     for img_path in image_paths:
+#         img = Image.open("data/test/cats/"+img_path).convert('RGB')
+#         img_tensor = transform(img)  # 形状: (3, H, W)
+
+#         # 累加统计量
+#         pixel_num += img_tensor.shape[1] * img_tensor.shape[2]
+#         channel_sum += torch.sum(img_tensor, dim=(1, 2))
+#         channel_sum_squared += torch.sum(img_tensor**2, dim=(1, 2))
+
+#     # 计算均值和标准差
+#     mean = channel_sum / pixel_num
+#     std = torch.sqrt(channel_sum_squared / pixel_num - mean**2)
+
+#     return mean.numpy(), std.numpy()
+
+# # 使用示例
+# mean, std = calculate_mean_std_torch(os.listdir("data/test/cats"))
+# print(f"均值 (R, G, B): {mean}")
+# print(f"标准差 (R, G, B): {std}")
+
 
 # --------------------------PG  vs  PNG 文件大小对比测试---------------
 # import torch
@@ -17,122 +179,122 @@ print(out.shape)
 #     print("=" * 60)
 #     print("JPG  vs  PNG 文件大小对比测试")
 #     print("=" * 60)
-    
+
 #     # 1. 创建测试图像数据
 #     print("\n1. 创建测试图像数据")
-    
+
 #     # 场景1: 随机噪声图像（高熵，难以压缩）
 #     random_tensor = torch.rand(3, 224, 224)
 #     random_pil = transforms.ToPILImage()(random_tensor)
-    
+
 #     # 场景2: 平滑渐变图像（低熵，容易压缩）
 #     x = torch.linspace(0, 1, 224).view(1, 224, 1)
 #     y = torch.linspace(0, 1, 224).view(1, 1, 224)
 #     gradient_tensor = (x + y) / 2
 #     gradient_tensor = gradient_tensor.repeat(3, 1, 1)
 #     gradient_pil = transforms.ToPILImage()(gradient_tensor)
-    
+
 #     # 场景3: 真实图像模拟（包含边缘和纹理）
 #     real_like_tensor = torch.rand(3, 224, 224)
 #     # 添加一些边缘效果
 #     real_like_tensor[:, 100:120, :] = 0.8  # 水平条带
 #     real_like_tensor[:, :, 100:120] = 0.3  # 垂直条带
 #     real_like_pil = transforms.ToPILImage()(real_like_tensor)
-    
+
 #     test_cases = [
 #         ("随机噪声", random_pil),
-#         ("平滑渐变", gradient_pil), 
+#         ("平滑渐变", gradient_pil),
 #         ("模拟真实", real_like_pil)
 #     ]
-    
+
 #     results = []
-    
+
 #     # 2. 测试不同质量设置的JPG
 #     print("\n2. 测试不同质量设置的JPG")
 #     jpg_qualities = [30, 50, 75, 95]
-    
+
 #     for name, pil_image in test_cases:
 #         print(f"\n--- {name}图像 ---")
 #         case_results = {'name': name}
-        
+
 #         # 保存PNG
 #         png_path = f'{name.lower().replace(" ", "_")}.png'
 #         pil_image.save(png_path, format='PNG', optimize=True)
 #         png_size = os.path.getsize(png_path)
 #         case_results['png'] = png_size
-        
+
 #         # 保存不同质量的JPG
 #         jpg_sizes = {}
 #         for quality in jpg_qualities:
 #             jpg_path = f'{name.lower().replace(" ", "_")}_q{quality}.jpg'
 #             pil_image.save(jpg_path, format='JPEG', quality=quality, optimize=True)
 #             jpg_sizes[quality] = os.path.getsize(jpg_path)
-        
+
 #         case_results['jpg'] = jpg_sizes
 #         results.append(case_results)
-        
+
 #         # 打印结果
 #         print(f"PNG 文件大小: {png_size/1024:.1f} KB")
 #         for quality, size in jpg_sizes.items():
 #             ratio = size / png_size
 #             print(f"JPG Q{quality:2d}: {size/1024:6.1f} KB ({ratio:.1%} of PNG)")
-    
+
 #     return results, test_cases
 
 # def test_grayscale_images():
 #     print("\n" + "=" * 60)
 #     print("灰度图像文件大小对比")
 #     print("=" * 60)
-    
+
 #     # 创建灰度测试图像
 #     gray_tensor = torch.rand(1, 224, 224)  # 单通道灰度
 #     gray_pil = transforms.ToPILImage()(gray_tensor)
-    
+
 #     # 保存为PNG
 #     gray_pil.save('grayscale_test.png', format='PNG', optimize=True)
 #     png_size = os.path.getsize('grayscale_test.png')
-    
+
 #     # 保存为不同质量的JPG
 #     gray_sizes = {}
 #     for quality in [30, 50, 75, 95]:
 #         gray_pil.save(f'grayscale_test_q{quality}.jpg', format='JPEG', quality=quality, optimize=True)
 #         gray_sizes[quality] = os.path.getsize(f'grayscale_test_q{quality}.jpg')
-    
+
 #     print(f"灰度PNG: {png_size/1024:.1f} KB")
 #     for quality, size in gray_sizes.items():
 #         ratio = size / png_size
 #         print(f"灰度JPG Q{quality}: {size/1024:.1f} KB ({ratio:.1%} of PNG)")
-    
+
 #     return png_size, gray_sizes
 
 # def test_compression_ratios():
 #     print("\n" + "=" * 60)
 #     print("压缩率分析")
 #     print("=" * 60)
-    
+
 #     # 计算理论最大压缩率
 #     uncompressed_size = 3 * 224 * 224  # 3通道, 224x224, 每像素1字节
 #     print(f"未压缩数据大小: {uncompressed_size/1024:.1f} KB")
-    
+
 #     # 测试实际图像
 #     test_image = torch.rand(3, 224, 224)
 #     test_pil = transforms.ToPILImage()(test_image)
-    
+
 #     # 无优化保存
 #     test_pil.save('test_no_optimize.png', format='PNG', optimize=False)
 #     test_pil.save('test_no_optimize.jpg', format='JPEG', quality=95, optimize=False)
-    
+
 #     # 优化保存
 #     test_pil.save('test_optimize.png', format='PNG', optimize=True)
 #     test_pil.save('test_optimize.jpg', format='JPEG', quality=95, optimize=True)
-    
+
 #     sizes = {
 #         'PNG无优化': os.path.getsize('test_no_optimize.png'),
 #         'PNG优化': os.path.getsize('test_optimize.png'),
 #         'JPG无优化': os.path.getsize('test_no_optimize.jpg'),
 #         'JPG优化': os.path.getsize('test_optimize.jpg')
 #     }
-    
+
 #     print("优化效果对比:")
 #     for name, size in sizes.items():
 #         ratio = size / uncompressed_size
@@ -142,13 +304,13 @@ print(out.shape)
 # if __name__ == "__main__":
 #     # 主要测试
 #     results, test_cases = compare_jpg_png_sizes()
-    
+
 #     # 灰度图像测试
 #     gray_png, gray_jpg = test_grayscale_images()
-    
+
 #     # 压缩率测试
 #     test_compression_ratios()
-    
+
 #     # 清理测试文件
 #     print("\n清理测试文件...")
 #     for name, _ in test_cases:
@@ -161,9 +323,9 @@ print(out.shape)
 #             jpg_file = f'{base_name}_q{quality}.jpg'
 #             if os.path.exists(jpg_file):
 #                 os.remove(jpg_file)
-    
+
 #     # 删除其他测试文件
-#     for file in ['grayscale_test.png', 'grayscale_test_q30.jpg', 'grayscale_test_q50.jpg', 
+#     for file in ['grayscale_test.png', 'grayscale_test_q30.jpg', 'grayscale_test_q50.jpg',
 #                  'grayscale_test_q75.jpg', 'grayscale_test_q95.jpg', 'test_no_optimize.png',
 #                  'test_no_optimize.jpg', 'test_optimize.png', 'test_optimize.jpg']:
 #         if os.path.exists(file):
@@ -236,7 +398,7 @@ print(out.shape)
 # b_cos.cos_()
 # print(f"b.cos_() = {b_cos}")
 
-# # 正弦函数的原地操作  
+# # 正弦函数的原地操作
 # b_sin = b.clone()
 # b_sin.sin_()
 # print(f"b.sin_() = {b_sin}")
@@ -313,28 +475,28 @@ print(out.shape)
 # def performance_comparison():
 #     """性能对比测试"""
 #     large_tensor = torch.randn(5000, 5000)  # 约 100MB 数据
-    
+
 #     # .pt 格式测试
 #     start_time = time.time()
 #     torch.save(large_tensor, 'tmp/test.pt')
 #     pt_save_time = time.time() - start_time
-    
+
 #     start_time = time.time()
 #     loaded_pt = torch.load('tmp/test.pt')
 #     pt_load_time = time.time() - start_time
-    
+
 #     # .hdf5 格式测试
 #     start_time = time.time()
 #     with h5py.File('tmp/test.hdf5', 'w') as f:
 #         f.create_dataset('data', data=large_tensor.numpy(), compression='gzip')
 #     h5_save_time = time.time() - start_time
-    
+
 #     start_time = time.time()
 #     with h5py.File('tmp/test.hdf5', 'r') as f:
 #         loaded_array = f['data'][:]
 #     loaded_h5 = torch.from_numpy(loaded_array)
 #     h5_load_time = time.time() - start_time
-    
+
 #     print(f".pt 格式 - 保存: {pt_save_time:.3f}s, 加载: {pt_load_time:.3f}s")
 #     print(f".hdf5格式 - 保存: {h5_save_time:.3f}s, 加载: {h5_load_time:.3f}s")
 
@@ -346,10 +508,10 @@ print(out.shape)
 # def check_memory_usage():
 #     """检查不同数据类型的记忆体占用"""
 #     size = 1000  # 1000个元素
-    
+
 #     tensor_f32 = torch.randn(size, size, dtype=torch.float32)
 #     tensor_f64 = torch.randn(size, size, dtype=torch.float64)
-    
+
 #     print(f"float32 张量内存: {tensor_f32.element_size() * tensor_f32.nelement() / 1024**2:.2f} MB")
 #     print(f"float64 张量内存: {tensor_f64.element_size() * tensor_f64.nelement() / 1024**2:.2f} MB")
 #     print(f"内存比例: {tensor_f64.element_size() / tensor_f32.element_size():.1f}x")
@@ -403,40 +565,40 @@ print(out.shape)
 
 # def visualize_normalized_image(original_tensor, gray_tensor, save_path="data/compare_normalized.png"):
 #     """处理标准化后的图像数据"""
-    
+
 #     # 方法1: 反标准化（如果您知道原始标准化参数）
 #     # 假设使用的是ImageNet标准化的均值和标准差
 #     # [0.2126, 0.7152, 0.0722]
 #     IMAGENET_MEAN = [0.485, 0.456, 0.406]
 #     IMAGENET_STD = [0.229, 0.224, 0.225]
-    
+
 #     # 反标准化原始图像
 #     original_denormalized = original_tensor.clone()
 #     for i in range(3):
 #         original_denormalized[i] = original_denormalized[i] * IMAGENET_STD[i] + IMAGENET_MEAN[i]
-    
+
 #     # 限制值范围在[0,1]之间
 #     original_denormalized = torch.clamp(original_denormalized, 0, 1)
-    
+
 #     # 可视化
 #     fig, axes = plt.subplots(1, 2, figsize=(12, 5))
-    
+
 #     # 原始图像（反标准化后）
 #     axes[0].imshow(original_denormalized.permute(1, 2, 0))
 #     axes[0].set_title('Original Image (Denormalized)')
 #     axes[0].axis('off')
-    
+
 #     # 灰度图像 - 需要归一化到[0,1]范围
 #     gray_normalized = (gray_tensor - gray_tensor.min()) / (gray_tensor.max() - gray_tensor.min())
 #     axes[1].imshow(gray_normalized, cmap='gray')
 #     axes[1].set_title('Weighted Grayscale')
 #     axes[1].axis('off')
-    
+
 #     plt.tight_layout()
 #     # plt.show()
 #     plt.savefig(save_path, dpi=300, bbox_inches='tight', facecolor='white')
 #     print(f"对比图已保存至: {save_path}")
-    
+
 #     # 关闭plt，避免内存泄漏
 #     plt.close()
 
@@ -446,10 +608,10 @@ print(out.shape)
 #     """保存灰度图片，处理标准化数据"""
 #     # 将灰度图归一化到[0,1]范围
 #     gray_normalized = (gray_tensor - gray_tensor.min()) / (gray_tensor.max() - gray_tensor.min())
-    
+
 #     # 转换为PIL图像
 #     gray_pil = transforms.ToPILImage()(gray_normalized.unsqueeze(0))
-    
+
 #     # 保存图片
 #     gray_pil.save(save_path)
 #     print(f"灰度图片已保存至: {save_path}")
@@ -461,7 +623,7 @@ print(out.shape)
 #     img = Image.open(image_path)
 #     img_t = preprocess(img)
 #     print(f"原始图片形状: {img_t.shape}")
-    
+
 #     # 灰度化处理
 #     weights_named = torch.tensor([0.2126, 0.7152, 0.0722], names=['channels'])
 #     img_named = img_t.refine_names(..., 'channels', 'rows', 'columns')
@@ -470,19 +632,19 @@ print(out.shape)
 #     gray_t = gray_named.rename(None)
 #     print(f"灰度图形状: {gray_t.shape}")
 #     print(f"灰度图值范围: [{gray_t.min():.3f}, {gray_t.max():.3f}]")
-    
+
 #     # 可视化对比
 #     visualize_normalized_image(img_t, gray_t)
-    
+
 #     # 保存灰度图片
 #     save_grayscale_image(gray_t, save_path)
-    
+
 #     return gray_t
 
 # # 使用示例
 # if __name__ == "__main__":
 #     # 替换为您的图片路径
-#     image_path = f"data/test/dogs/dog.4001.jpg"  
+#     image_path = f"data/test/dogs/dog.4001.jpg"
 #     save_path = "data/gray_dog4001.jpg"
 #     gray_tensor = main(image_path, save_path)
 
