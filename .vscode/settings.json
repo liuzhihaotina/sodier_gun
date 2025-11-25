@@ -53,6 +53,22 @@
         "ratio": "cpp",
         "ranges": "cpp",
         "semaphore": "cpp",
-        "stop_token": "cpp"
+        "stop_token": "cpp",
+        "iomanip": "cpp",
+        "barrier": "cpp",
+        "codecvt": "cpp",
+        "complex": "cpp",
+        "condition_variable": "cpp",
+        "cstring": "cpp",
+        "forward_list": "cpp",
+        "map": "cpp",
+        "unordered_set": "cpp",
+        "fstream": "cpp",
+        "mutex": "cpp",
+        "sstream": "cpp",
+        "cinttypes": "cpp",
+        "typeindex": "cpp",
+        "valarray": "cpp",
+        "variant": "cpp"
     }
 }

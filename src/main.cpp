@@ -1,11 +1,8 @@
 #include <iostream>
-#include "test1.h"
-
-using namespace std;
+#include "add.h"
 
 int main()
 {
-    int f;
-    cout << "f = " << f << std::endl;
-    return 0;
+    std::cout << (3?1:0) << '\n';
+    std::cout << f(4) << '\n';
 }
