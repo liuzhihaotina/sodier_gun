@@ -1,3 +1,26 @@
+# -----------------------------------------------------
+# import torch
+# d = torch.tensor([[1,0.1],[2,0.2],[3,0.3],[1,0.4],[2,0.5],[3,0.6]])
+# d_c = d.view(-1,3,d.shape[1])
+# pass
+# -------------------time_series bike_data-------------------------------
+# import torch
+# import numpy as np
+
+# bikes_numpy = np.loadtxt(
+# "/mnt/d/书籍/训练模型/dlwpt-code-master/data/p1ch4/bike-sharing-dataset/hour-fixed.csv",
+# dtype=np.float32,
+# delimiter=",",
+# skiprows=1,
+# converters={1: lambda x: float(x[8:10])})
+# bikes = torch.from_numpy(bikes_numpy)
+# first_day = bikes[:24].long()
+# weather_onehot = torch.zeros(first_day.shape[0], 4)
+# weather_onehot.scatter_(
+# dim=1,
+# index=first_day[:,9].unsqueeze(1).long() - 1, value=1.0)
+# pass 
+
 # ------------------------------------np.float16/32/64内存占用对比-------------------------------------
 # import numpy as np
 # def memory_comparison():
@@ -20,57 +43,57 @@
 # memory_comparison()
 
 # ------------------------------读取csv文件为numpy数组-----------------------------
-import numpy as np
-import csv
-import torch
-# 设置打印选项，禁用科学计数法
-torch.set_printoptions(sci_mode=False)
+# import numpy as np
+# import csv
+# import torch
+# # 设置打印选项，禁用科学计数法
+# torch.set_printoptions(sci_mode=False)
 
-wine_path = "/mnt/d/书籍/训练模型/dlwpt-code-master/data/p1ch4/tabular-wine/winequality-white.csv"
-wineq_numpy = np.loadtxt(wine_path, dtype=np.float32,
-                         delimiter=";", skiprows=1)
-a = csv.reader(open(wine_path), delimiter=';')
-# print(f"a.type={type(a)}")
-col_list = next(a)
-# print(wineq_numpy.shape) # (4898, 12)
-# print(col_list)
-# print(wineq_numpy[0])  # 查看第一行数据
-# print(next(a))
-# wineq_numpy2 = np.array(list(a), dtype=np.float32)
-wineq_tensor = torch.from_numpy(wineq_numpy)
-# print(wineq_tensor.shape, wineq_tensor.dtype, wineq_tensor.device)
-data = wineq_tensor[:, :-1]
-data_mean = data.mean(dim=0)
-data_var = data.var(dim=0)
-# print(data_mean.shape, data_var.shape)
-data_normalized = (data - data_mean) / data_var.sqrt()
-# print('---data：', data[0])#.to(dtype=torch.int))
-# print('---data that be normalized：', data_normalized[0])
+# wine_path = "/mnt/d/书籍/训练模型/dlwpt-code-master/data/p1ch4/tabular-wine/winequality-white.csv"
+# wineq_numpy = np.loadtxt(wine_path, dtype=np.float32,
+#                          delimiter=";", skiprows=1)
+# a = csv.reader(open(wine_path), delimiter=';')
+# # print(f"a.type={type(a)}")
+# col_list = next(a)
+# # print(wineq_numpy.shape) # (4898, 12)
+# # print(col_list)
+# # print(wineq_numpy[0])  # 查看第一行数据
+# # print(next(a))
+# # wineq_numpy2 = np.array(list(a), dtype=np.float32)
+# wineq_tensor = torch.from_numpy(wineq_numpy)
+# # print(wineq_tensor.shape, wineq_tensor.dtype, wineq_tensor.device)
+# data = wineq_tensor[:, :-1]
+# data_mean = data.mean(dim=0)
+# data_var = data.var(dim=0)
+# # print(data_mean.shape, data_var.shape)
+# data_normalized = (data - data_mean) / data_var.sqrt()
+# # print('---data：', data[0])#.to(dtype=torch.int))
+# # print('---data that be normalized：', data_normalized[0])
 
-# print('----float16:',data[0].half().dtype)
-# print('----float32:',data[0].float().dtype)
-# print('----float64:',data[0].double().dtype)
-target = wineq_tensor[:, -1].long()
-# print(target.shape, target.shape[0], type(target.shape), type(target.shape[0]))
-# tager_onehot = torch.nn.functional.one_hot(target, num_classes=10)
-target_onehot = torch.zeros(target.shape[0], 10).scatter_( 1, target.unsqueeze(1), 1.0)
+# # print('----float16:',data[0].half().dtype)
+# # print('----float32:',data[0].float().dtype)
+# # print('----float64:',data[0].double().dtype)
+# target = wineq_tensor[:, -1].long()
+# # print(target.shape, target.shape[0], type(target.shape), type(target.shape[0]))
+# # tager_onehot = torch.nn.functional.one_hot(target, num_classes=10)
+# target_onehot = torch.zeros(target.shape[0], 10).scatter_( 1, target.unsqueeze(1), 1.0)
 
-# bad_index = (target <= 3).nonzero(as_tuple=True)[0] # 找出满足条件的索引
-bad_mask = (target <= 3) # 布尔掩码，满足条件的True，否则False
-mid_mask = (target > 3) & (target < 7)
-good_mask = (target >= 7)
-bad_data = data[bad_mask]
-mid_data = data[mid_mask]
-good_data = data[good_mask]
+# # bad_index = (target <= 3).nonzero(as_tuple=True)[0] # 找出满足条件的索引
+# bad_mask = (target <= 3) # 布尔掩码，满足条件的True，否则False
+# mid_mask = (target > 3) & (target < 7)
+# good_mask = (target >= 7)
+# bad_data = data[bad_mask]
+# mid_data = data[mid_mask]
+# good_data = data[good_mask]
 
-bad_mean = bad_data.mean(dim=0)
-mid_mean = mid_data.mean(dim=0)
-good_mean = good_data.mean(dim=0)
+# bad_mean = bad_data.mean(dim=0)
+# mid_mean = mid_data.mean(dim=0)
+# good_mean = good_data.mean(dim=0)
 
-for i, args in enumerate(zip(col_list[:-1], bad_mean, mid_mean, good_mean)):
-    print('{:2} {:20} {:6.2f} {:6.2f} {:6.2f}'.format(i, *args))
+# for i, args in enumerate(zip(col_list[:-1], bad_mean, mid_mean, good_mean)):
+#     print('{:2} {:20} {:6.2f} {:6.2f} {:6.2f}'.format(i, *args))
 
-pass
+# pass
 # bad_data = data_normalized[bad_mask]
 # mid_data = data_normalized[mid_mask]
 # good_data = data_normalized[good_mask]
