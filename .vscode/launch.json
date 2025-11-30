@@ -2,6 +2,14 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Python: line",
+            "type": "debugpy",
+            "request": "launch",
+            "python": "/home/tina/miniconda3/envs/myenv/bin/python",
+            "program": "scripts/line_model.py",
+            "console": "integratedTerminal"
+        }, 
+        {
             "name": "Python: test",
             "type": "debugpy",
             "request": "launch",
