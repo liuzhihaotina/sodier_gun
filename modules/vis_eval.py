@@ -31,7 +31,7 @@ def plot_regression_line(y_true, y_pred, x_data):
     plt.subplot(1, 2, 1)
     plt.scatter(x_data.numpy(), y_true.numpy(),
                 alpha=0.7, color='blue', label='真实值', s=30)
-    plt.scatter(x_data.numpy(), y_pred.numpy(),
+    plt.scatter(x_data.numpy(), y_pred.detach().numpy(),
                 alpha=1, color='red', label='预测值', s=150, marker='x')
     plt.plot(x_sorted.numpy(), y_pred_sorted.detach().numpy(),
              'r--', linewidth=2, alpha=0.5, label='回归线')
@@ -44,7 +44,7 @@ def plot_regression_line(y_true, y_pred, x_data):
     # 子图2：残差图
     plt.subplot(1, 2, 2)
     residuals = y_true - y_pred
-    plt.scatter(y_pred.detach().numpy(), residuals.numpy(),
+    plt.scatter(y_pred.detach().numpy(), residuals.detach().numpy(),
                 alpha=0.7, color='green', label='gt-pred', s=40)
     plt.axhline(y=0, color='black', linestyle='--', label='水平参考线', alpha=0.8)
     plt.xlabel('预测值')
