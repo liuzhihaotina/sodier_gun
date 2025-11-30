@@ -3,12 +3,13 @@ import torch
 import os
 import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-from modules.train_eval import train_model, eval_model
+from modules.train_eval import train_model, train_model_auto, eval_model
 from modules.vis_eval import result_plot
+from modules.normalize import z_score_normalize, min_max_normalize_neg1_1, min_max_normalize_0_1, standardize_data
 
 # ----------------------------线性回归模型---------------------------------------
-class LinearRegression():
-    """线性回归模型"""
+class LinearRegression_handgrad():
+    """线性回归模型--手写梯度版"""
     def __init__(self, w, b):
         self.w = w
         self.b = b
@@ -27,6 +28,18 @@ class LinearRegression():
 
     def return_params(self):
         return f'(w, b)=({self.w}, {self.b})'
+    
+class LinearRegression_autograd():
+    """线性回归模型--自动更新梯度"""
+    def __init__(self, params):
+        self.params = params
+    
+    def forward(self, x):
+        """推理值"""
+        return self.params[0]*x+self.params[1]
+
+    def return_params(self):
+        return f'(w, b)=({self.params[0]}, {self.params[1]})'
 
 # ------------------------训练集、测试集产生--------------------------------------
 def create_line_tensor(w, b, n_samples=16, x_range=(-5, 5)):
@@ -47,22 +60,42 @@ def create_line_tensor(w, b, n_samples=16, x_range=(-5, 5)):
 # ------------------------------主函数-----------------------------------
 if __name__ == '__main__':
     # 迭代周期、学习率
-    epochs = 1000
-    learning_rate = 0.015
-
-    # 创建模型实例
-    w, b = 1, 0
-    model = LinearRegression(w, b)
+    epochs = 10000
+    learning_rate = 1e-2
+    
+    # 生成训练集和测试集
+    w, b = 2, 1.5
+    samples = create_line_tensor(w, b, n_samples=1000, x_range=(-100, 100))
+    n_samples = samples.shape[0]
+    n_val = int(0.2 * n_samples) # 20%测试集 80%训练集
+    shuffled_indices = torch.randperm(n_samples)
+    train_indices = shuffled_indices[:-n_val]
+    val_indices = shuffled_indices[-n_val:]
+    train_set = samples[train_indices]
+    test_set = samples[val_indices]
+    # 归一化
+    # train_set = min_max_normalize_neg1_1(train_set)
+    # train_set = z_score_normalize(train_set)
+    # train_set = standardize_data(train_set)
+    # train_set = min_max_normalize_0_1(train_set)
+    
+    # 初始参数
+    w, b = -1, 90
     print(f"\n模型初始化参数:")
-    print(f"权重: {model.w:.3f}")
-    print(f"偏置: {model.b:.3f}")
+    print(f"权重: {w:.3f}")
+    print(f"偏置: {b:.3f}")
 
-    # 训练模型
-    train_set = create_line_tensor(w, b, n_samples=100, x_range=(-50, 50))
-    train_model(model, train_set, learning_rate, epochs)
+    # 创建模型实例、并训练
+    choice = 'auto'
+    if choice == 'hand':   # --手动计算梯度
+        model = LinearRegression_handgrad(w, b)
+        train_model(model, train_set, learning_rate, epochs)
+    elif choice == 'auto': # --自动计算梯度
+        params = torch.tensor([w, b], dtype=torch.float32, requires_grad=True)
+        model = LinearRegression_autograd(params)
+        train_model_auto(model, train_set, learning_rate, epochs)
 
     # 测试评估
-    test_set = create_line_tensor(w, b, n_samples=50, x_range=(51, 100))
     eval_model(model, test_set)
     
     # 输出评估指标、可视化

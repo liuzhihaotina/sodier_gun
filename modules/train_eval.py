@@ -1,3 +1,6 @@
+import torch
+import torch.optim as optim
+
 # -------------------------------训练模型、评估模型---------------------------------------------
 def loss_cal(y, y_pred):
     return (y_pred - y)**2
@@ -7,15 +10,46 @@ def train_model(model, input, learning_rate, epochs):
     x = input[:, 0]
     y = input[:, 1]
     y_pred = model.forward(x) 
-    loss = (model.forward(x)-y)**2
+    loss = loss_cal(y, model.forward(x))
     print(f'init--> {model.return_params()}, total_loss: {loss.sum()}, mean_loss: {loss.mean()}') 
     for epoch in range(1, epochs+1):
 
         y_pred = model.forward(x) # 前向传播，返回推理值
         model.backward(x, y, y_pred, learning_rate) # 后向传播计算梯度值、结合学习率更新权重参数
+        torch.nn.utils.clip_grad_norm_([model.params], max_norm=1) # 防止梯度爆炸
+        
+        loss = loss_cal(y, y_pred) # 计算损失值
+        if epoch % (epochs/10) == 0:
+            print(f'epoch: {epoch}, {model.return_params()}, total_loss: {loss.sum()}, mean_loss: {loss.mean()}')
+
+def train_model_auto(model, input, learning_rate, epochs):
+    """训练模型"""
+    x = input[:, 0]
+    y = input[:, 1]
+    y_pred = model.forward(x) 
+    loss = loss_cal(y, model.forward(x))
+    print(f'init--> {model.return_params()}, total_loss: {loss.sum()}, mean_loss: {loss.mean()}') 
+    params=model.params
+    optimizer = optim.Adam([params], lr=learning_rate)
+    for epoch in range(1, epochs+1):
+
+        # if model.params.grad is not None:
+        #     model.params.grad.zero_()
+
+        y_pred = model.forward(x) # 前向传播，返回推理值
+        model.params=params
 
         loss = loss_cal(y, y_pred) # 计算损失值
-        if epoch % (epochs/10) ==0:
+        # optimizer = optim.Adam([model.params], lr=learning_rate)
+        optimizer.zero_grad()
+        loss.mean().backward() # 后向传播计算梯度值
+        torch.nn.utils.clip_grad_norm_([model.params], max_norm=1) # 防止梯度爆炸
+        optimizer.step()
+
+        # with torch.no_grad(): # 结合学习率更新权重参数
+        #     model.params -= model.params.grad*learning_rate
+
+        if epoch % (epochs/10) == 0:
             print(f'epoch: {epoch}, {model.return_params()}, total_loss: {loss.sum()}, mean_loss: {loss.mean()}')
 
 def eval_model(model, test_set):
