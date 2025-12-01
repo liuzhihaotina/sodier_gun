@@ -56,11 +56,8 @@ def plot_regression_line(y_true, y_pred, x_data):
     plt.tight_layout()
     plt.show()
 
-def result_plot(input, model, draw=False):
+def result_plot(x, y_true, y_pred, draw=False):
     """输出模型评估指标、绘制预测结果"""
-    x = input[:, 0]
-    y_true = input[:, 1]
-    y_pred = model.forward(x) # 预测值
     # 打印统计信息
     mse = torch.mean((y_true - y_pred) ** 2).item()
     r2 = 1 - torch.sum((y_true - y_pred) ** 2) / torch.sum((y_true - y_true.mean()) ** 2)
@@ -70,4 +67,6 @@ def result_plot(input, model, draw=False):
     
     if draw:
         set_chinese()
+        if x.shape!=y_pred.shape:
+            x = x[:, -1]
         plot_regression_line(y_true, y_pred, x)

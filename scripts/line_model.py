@@ -1,33 +1,33 @@
 import torch
+import torch.nn as nn
 
 import os
 import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-from modules.train_eval import train_model, train_model_auto, eval_model
-from modules.vis_eval import result_plot
+from modules.train_eval import train_model, train_model_auto, train_model_nn 
+from modules.train_eval import eval_model, eval_model_nn
 from modules.normalize import z_score_normalize, min_max_normalize_neg1_1, min_max_normalize_0_1, standardize_data
 
 # ----------------------------线性回归模型---------------------------------------
 class LinearRegression_handgrad():
     """线性回归模型--手写梯度版"""
-    def __init__(self, w, b):
-        self.w = w
-        self.b = b
+    def __init__(self, params):
+        self.params = params
     
     def forward(self, x):
         """推理值"""
-        return self.w*x+self.b
+        return self.params[0]*x+self.params[1]
     
     def backward(self, x, y, y_pred, learning_rate): 
         """计算梯度、更新参数"""
         grad_w = 2 * ((y_pred - y)*x).mean()
         grad_b = 2 * (y_pred - y).mean()
 
-        self.w -= grad_w*learning_rate
-        self.b -= grad_b*learning_rate
+        self.params[0] -= grad_w*learning_rate
+        self.params[1] -= grad_b*learning_rate
 
     def return_params(self):
-        return f'(w, b)=({self.w}, {self.b})'
+        return f'(w, b)=({self.params[0]}, {self.params[1]})'
     
 class LinearRegression_autograd():
     """线性回归模型--自动更新梯度"""
@@ -86,17 +86,33 @@ if __name__ == '__main__':
     print(f"偏置: {b:.3f}")
 
     # 创建模型实例、并训练
-    choice = 'auto'
+    choice = 'nn'
     if choice == 'hand':   # --手动计算梯度
-        model = LinearRegression_handgrad(w, b)
-        train_model(model, train_set, learning_rate, epochs)
+        model = LinearRegression_handgrad([w, b])
+        x = train_set[:, 0]
+        y = train_set[:, 1]
+        train_model(model, x, y, learning_rate, epochs)
+        # 测试评估
+        x = test_set[:, 0]
+        y = test_set[:, 1]
+        eval_model(model, x, y, draw=True)
     elif choice == 'auto': # --自动计算梯度
         params = torch.tensor([w, b], dtype=torch.float32, requires_grad=True)
         model = LinearRegression_autograd(params)
-        train_model_auto(model, train_set, learning_rate, epochs)
-
-    # 测试评估
-    eval_model(model, test_set)
-    
-    # 输出评估指标、可视化
-    result_plot(test_set, model, draw=True)
+        x = train_set[:, 0]
+        y = train_set[:, 1]
+        train_model_auto(model, x, y, learning_rate, epochs)
+        # 测试评估
+        x = test_set[:, 0]
+        y = test_set[:, 1]
+        eval_model(model, x, y, draw=True)
+    else:
+        linear_model = nn.Linear(1, 1)
+        model = linear_model
+        x = train_set[:, 0].unsqueeze(1)
+        y = train_set[:, 1].unsqueeze(1)
+        train_model_nn(model, x, y, learning_rate, epochs)
+        # 测试评估
+        x = test_set[:, 0].unsqueeze(1)
+        y = test_set[:, 1].unsqueeze(1)
+        eval_model_nn(model, x, y, draw=True)

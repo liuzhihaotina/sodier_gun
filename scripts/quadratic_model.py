@@ -1,23 +1,22 @@
 import torch
+import torch.nn as nn
 
 import os
 import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-from modules.train_eval import train_model, train_model_auto, eval_model
-from modules.vis_eval import result_plot
+from modules.train_eval import train_model, train_model_auto, train_model_nn 
+from modules.train_eval import eval_model, eval_model_nn
 from modules.normalize import z_score_normalize, min_max_normalize_neg1_1, min_max_normalize_0_1, standardize_data
 
 # ----------------------------二次多项式回归模型---------------------------------------
 class QuadraticRegression_handgrad():
     """二次多项式回归模型--手写梯度版"""
-    def __init__(self, a, b, c):
-        self.a = a
-        self.b = b
-        self.c = c
+    def __init__(self, params):
+        self.params = params
     
     def forward(self, x):
         """推理值"""
-        return self.a*x**2 + self.b*x + self.c 
+        return self.params[0]*x**2 + self.params[1]*x + self.params[2] 
     
     def backward(self, x, y, y_pred, learning_rate): 
         """计算梯度、更新参数"""
@@ -25,12 +24,12 @@ class QuadraticRegression_handgrad():
         grad_b = 2 * ((y_pred - y)*x).mean()
         grad_c = 2 * (y_pred - y).mean()
 
-        self.a -= grad_a*learning_rate
-        self.b -= grad_b*learning_rate
-        self.c -= grad_c*learning_rate
+        self.params[0] -= grad_a*learning_rate
+        self.params[1] -= grad_b*learning_rate
+        self.params[2] -= grad_c*learning_rate
 
     def return_params(self):
-        return f'(a, b, c)=({self.a}, {self.b}, {self.c})'
+        return f'(a, b, c)=({self.params[0]}, {self.params[1]}, {self.params[2]})'
     
 class QuadraticRegression_autograd():
     """二次多项式回归模型--自动更新梯度"""
@@ -90,17 +89,37 @@ if __name__ == '__main__':
     print(f"常数: {c:.3f}")
     
     # 创建模型实例、并训练
-    choice = 'auto'
+    choice = 'nn'
     if choice == 'hand':   # --手动计算梯度
-        model = QuadraticRegression_handgrad(a, b, c)
-        train_model(model, train_set, learning_rate, epochs)
+        model = QuadraticRegression_handgrad([a, b, c])
+        x = train_set[:, 0]
+        y = train_set[:, 1]
+        train_model(model, x, y, learning_rate, epochs)
+        # 测试评估
+        x = test_set[:, 0]
+        y = test_set[:, 1]
+        eval_model(model, x, y, draw=True)
     elif choice == 'auto': # --自动计算梯度
         params = torch.tensor([a, b, c], dtype=torch.float32, requires_grad=True)
         model = QuadraticRegression_autograd(params)
-        train_model_auto(model, train_set, learning_rate, epochs)
+        x = train_set[:, 0]
+        y = train_set[:, 1]
+        train_model_auto(model, x, y, learning_rate, epochs)
+        # 测试评估
+        x = test_set[:, 0]
+        y = test_set[:, 1]
+        eval_model(model, x, y, draw=True)
+    else:
+        linear_model = nn.Linear(2, 1)
+        model = linear_model
+        x = train_set[:, 0].unsqueeze(1)
+        x = torch.cat([x**2, x], dim=1)
+        y = train_set[:, 1].unsqueeze(1)
+        train_model_nn(model, x, y, learning_rate, epochs)
+        # 测试评估
+        x = test_set[:, 0].unsqueeze(1)
+        x = torch.cat([x**2, x], dim=1)
+        y = test_set[:, 1].unsqueeze(1)
+        eval_model_nn(model, x, y, draw=True)
 
-    # 测试评估
-    eval_model(model, test_set)
-    
-    # 输出评估指标、可视化
-    result_plot(test_set, model, draw=True)
+
