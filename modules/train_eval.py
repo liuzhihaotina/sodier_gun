@@ -58,7 +58,10 @@ def train_model_nn(model, x, y, learning_rate, epochs):
     """训练模型"""
     y_pred = model(x) 
     loss = loss_calnn(y, y_pred)
-    print(f'init--> (w, b)={model.weight.data.squeeze().tolist(), model.bias.item()}, total_loss: {loss.sum()}, mean_loss: {loss.mean()}') 
+    try:
+        print(f'init--> params={model.weight.data.squeeze().tolist(), model.bias.item()}, total_loss: {loss.sum()}, mean_loss: {loss.mean()}')
+    except: # 神经网络不推荐输出具体参数
+        print(f'init--> total_loss: {loss.sum()}, mean_loss: {loss.mean()}')
     optimizer = optim.Adam(model.parameters(), lr=learning_rate)
     for epoch in range(1, epochs+1):
 
@@ -71,8 +74,10 @@ def train_model_nn(model, x, y, learning_rate, epochs):
         optimizer.step()
 
         if epoch % (epochs/10) == 0:
-            print(f'epoch: {epoch}, (w, b)={model.weight.data.squeeze().tolist(), model.bias.item()}, total_loss: {loss.sum()}, mean_loss: {loss.mean()}')
-
+            try:
+                print(f'epoch: {epoch}, params={model.weight.data.squeeze().tolist(), model.bias.item()}, total_loss: {loss.sum()}, mean_loss: {loss.mean()}')
+            except:
+                print(f'epoch: {epoch}, total_loss: {loss.sum()}, mean_loss: {loss.mean()}')
 def eval_model(model, x, y, draw):
     y_pred = model.forward(x)
 
@@ -87,7 +92,9 @@ def eval_model_nn(model, x, y, draw):
     y_pred = model(x)
 
     loss = loss_calnn(y, y_pred)
-    print(f'(w, b)={model.weight.data.squeeze().tolist(), model.bias.item()}, total_loss: {loss.sum()}, mean_loss: {loss.mean()}')
-
+    try:
+        print(f'params={model.weight.data.squeeze().tolist(), model.bias.item()}, total_loss: {loss.sum()}, mean_loss: {loss.mean()}')
+    except:
+        print(f'total_loss: {loss.sum()}, mean_loss: {loss.mean()}')
     # 输出评估指标、可视化
     result_plot(x, y, y_pred, draw=draw)

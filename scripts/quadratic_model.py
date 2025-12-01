@@ -88,8 +88,8 @@ if __name__ == '__main__':
     print(f"一次系数: {b:.3f}")
     print(f"常数: {c:.3f}")
     
-    # 创建模型实例、并训练
-    choice = 'nn'
+    # 创建模型实例、并训练 抛物线回归效果排名：nn.ln > auto > nn > hand
+    choice = 'nn.ln'
     if choice == 'hand':   # --手动计算梯度
         model = QuadraticRegression_handgrad([a, b, c])
         x = train_set[:, 0]
@@ -109,9 +109,25 @@ if __name__ == '__main__':
         x = test_set[:, 0]
         y = test_set[:, 1]
         eval_model(model, x, y, draw=True)
-    else:
+    elif choice == 'nn.ln':
         linear_model = nn.Linear(2, 1)
         model = linear_model
+        x = train_set[:, 0].unsqueeze(1)
+        x = torch.cat([x**2, x], dim=1)
+        y = train_set[:, 1].unsqueeze(1)
+        train_model_nn(model, x, y, learning_rate, epochs)
+        # 测试评估
+        x = test_set[:, 0].unsqueeze(1)
+        x = torch.cat([x**2, x], dim=1)
+        y = test_set[:, 1].unsqueeze(1)
+        eval_model_nn(model, x, y, draw=True)
+    else:
+        from collections import OrderedDict
+        model = nn.Sequential(OrderedDict([
+                        ('hidden_linear', nn.Linear(2, 1000)),
+                        ('hidden_activation', nn.Tanh()),
+                        ('output_linear', nn.Linear(1000, 1))
+                        ]))
         x = train_set[:, 0].unsqueeze(1)
         x = torch.cat([x**2, x], dim=1)
         y = train_set[:, 1].unsqueeze(1)

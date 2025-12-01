@@ -85,8 +85,8 @@ if __name__ == '__main__':
     print(f"权重: {w:.3f}")
     print(f"偏置: {b:.3f}")
 
-    # 创建模型实例、并训练
-    choice = 'nn'
+    # 创建模型实例、并训练  线性回归效果排名：nn.ln > auto > nn > hand
+    choice = 'hand'
     if choice == 'hand':   # --手动计算梯度
         model = LinearRegression_handgrad([w, b])
         x = train_set[:, 0]
@@ -106,9 +106,23 @@ if __name__ == '__main__':
         x = test_set[:, 0]
         y = test_set[:, 1]
         eval_model(model, x, y, draw=True)
-    else:
+    elif choice == 'nn.ln':
         linear_model = nn.Linear(1, 1)
         model = linear_model
+        x = train_set[:, 0].unsqueeze(1)
+        y = train_set[:, 1].unsqueeze(1)
+        train_model_nn(model, x, y, learning_rate, epochs)
+        # 测试评估
+        x = test_set[:, 0].unsqueeze(1)
+        y = test_set[:, 1].unsqueeze(1)
+        eval_model_nn(model, x, y, draw=True)
+    else:
+        from collections import OrderedDict
+        model = nn.Sequential(OrderedDict([
+                        ('hidden_linear', nn.Linear(1, 8)),
+                        ('hidden_activation', nn.Tanh()),
+                        ('output_linear', nn.Linear(8, 1))
+                        ]))
         x = train_set[:, 0].unsqueeze(1)
         y = train_set[:, 1].unsqueeze(1)
         train_model_nn(model, x, y, learning_rate, epochs)
