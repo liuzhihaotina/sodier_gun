@@ -7,7 +7,16 @@
             "request": "launch",
             "python": "/home/tina/miniconda3/envs/myenv/bin/python",
             "program": "scripts/line_model.py",
-            "console": "integratedTerminal"
+            "console": "integratedTerminal",
+            "justMyCode": false,
+        }, 
+        {
+            "name": "Python: quadra",
+            "type": "debugpy",
+            "request": "launch",
+            "python": "/home/tina/miniconda3/envs/myenv/bin/python",
+            "program": "scripts/quadratic_model.py",
+            "console": "integratedTerminal",
         }, 
         {
             "name": "Python: test",
