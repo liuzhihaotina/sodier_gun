@@ -7,6 +7,8 @@
 .env
 config.local.json
 .vscode/settings.local.json
+scripts/test.py
+scripts/test1.py
 
 # 忽略整个目录内容
 node_modules/
