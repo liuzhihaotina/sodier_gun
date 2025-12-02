@@ -66,6 +66,8 @@ if __name__ == '__main__':
     # 生成训练集和测试集
     w, b = 2, 1.5
     samples = create_line_tensor(w, b, n_samples=1000, x_range=(-100, 100))
+    # from modules.draw_mean_std import mean_std_vis # 验证归一化
+    # mean_std_vis(samples[:,1].numpy(), save_back='line')
     n_samples = samples.shape[0]
     n_val = int(0.2 * n_samples) # 20%测试集 80%训练集
     shuffled_indices = torch.randperm(n_samples)
@@ -85,8 +87,8 @@ if __name__ == '__main__':
     print(f"权重: {w:.3f}")
     print(f"偏置: {b:.3f}")
 
-    # 创建模型实例、并训练  线性回归效果排名：nn.ln > auto > nn > hand
-    choice = 'hand'
+    # 创建模型实例、并训练  线性回归效果排名：nn.ln > nn(ReLU) > auto > nn(Tanh) > hand
+    choice = 'auto'
     if choice == 'hand':   # --手动计算梯度
         model = LinearRegression_handgrad([w, b])
         x = train_set[:, 0]
@@ -120,7 +122,7 @@ if __name__ == '__main__':
         from collections import OrderedDict
         model = nn.Sequential(OrderedDict([
                         ('hidden_linear', nn.Linear(1, 8)),
-                        ('hidden_activation', nn.Tanh()),
+                        ('hidden_activation', nn.ReLU()),
                         ('output_linear', nn.Linear(8, 1))
                         ]))
         x = train_set[:, 0].unsqueeze(1)
