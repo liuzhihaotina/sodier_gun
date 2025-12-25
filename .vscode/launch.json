@@ -2,6 +2,24 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Python: c_d",
+            "type": "debugpy",
+            "request": "launch",
+            "python": "/home/tina/miniconda3/envs/myenv/bin/python",
+            "program": "scripts/compare_dali.py",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+        }, 
+        {
+            "name": "Python: c_t",
+            "type": "debugpy",
+            "request": "launch",
+            "python": "/home/tina/miniconda3/envs/myenv/bin/python",
+            "program": "scripts/compare_torch.py",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+        }, 
+        {
             "name": "Python: line",
             "type": "debugpy",
             "request": "launch",
