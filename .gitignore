@@ -13,6 +13,7 @@ scripts/test1.py
 # 忽略整个目录内容
 node_modules/
 dist/
+dummy_data_benchmark/
 
 # 忽略整个目录（包括目录本身）
 build
