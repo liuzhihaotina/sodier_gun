@@ -32,11 +32,12 @@ nn.Linear(1024, 512),
 nn.ReLU(),
 nn.Linear(512, 128),
 nn.ReLU(),
-nn.Linear(128, 2),
-nn.LogSoftmax(dim=1))
+nn.Linear(128, 2))#,
+# nn.LogSoftmax(dim=1))
 learning_rate = 1e-2
 optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
-loss_fn = nn.NLLLoss()
+# loss_fn = nn.NLLLoss()
+loss_fn = nn.CrossEntropyLoss()
 n_epochs = 10
 for epoch in range(n_epochs):
     for img, label in train_loader:
