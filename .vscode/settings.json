@@ -66,5 +66,10 @@
         "cinttypes": "cpp"
     },
     "liveServer.settings.port": 5501,
-    "files.autoSave": "afterDelay"
+    "files.autoSave": "afterDelay",
+    "python.defaultInterpreterPath": "/home/tina/miniconda3/envs/myenv/bin/python",
+    "code-runner.executorMap": {
+    "python": "\"$pythonPath\" -u \"$fullFileName\""
+    },
+    // "code-runner.runInTerminal": true
 }
