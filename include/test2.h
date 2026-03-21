@@ -2,6 +2,9 @@
 #define TEST_2
 
 // 函数声明
-void test2();
+namespace test2
+{
+    void test2();
+}
 
 #endif // TEST_2

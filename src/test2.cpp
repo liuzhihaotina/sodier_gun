@@ -1,7 +1,10 @@
 #include <iostream>
 #include "test2.h"
 using namespace std;
-void test2()
+namespace test2
 {
-    cout << "This is test2 function" << endl;
+    void test2()
+    {
+        cout << "This is test2 function" << endl;
+    }
 }
