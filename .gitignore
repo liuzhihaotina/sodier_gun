@@ -10,6 +10,9 @@ config.local.json
 node_modules/
 dist/
 build/
+data/
+LeetCode/
+functions/
 
 # 忽略所有名为 temp 的文件夹
 temp/
